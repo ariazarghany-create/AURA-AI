@@ -1,6 +1,6 @@
 {
   "name": "AURA AI",
-  "short_name": "AURA AI",
+  "short_name": "AURA",
   "description": "دستیار هوشمند آنلاین و آفلاین",
   "lang": "fa",
   "dir": "rtl",
@@ -11,10 +11,10 @@
   "theme_color": "#101321",
   "icons": [
     {
-      "src": "./assets/icon.svg",
+      "src": "./icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
