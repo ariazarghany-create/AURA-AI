@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101321">
+  <meta name="description" content="AURA AI؛ دستیار هوشمند آنلاین و آفلاین">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <title>AURA AI</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">✦</span><span>AURA <b>AI</b></span></div>
+      <button class="new-chat" id="newChat">＋ گفت‌وگوی جدید</button>
+      <div class="side-label">گفت‌وگوهای اخیر</div>
+      <div id="history" class="history"></div>
+      <div class="side-bottom">
+        <button class="side-action" id="themeToggle">◐ تغییر پوسته</button>
+        <p>نسخه آزمایشی · 0.1.0</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="باز کردن منو">☰</button>
+        <div class="mobile-brand">✦ AURA AI</div>
+        <div class="mode-wrap">
+          <span id="connectionDot" class="status-dot"></span>
+          <select id="modeSelect" aria-label="حالت گفتگو">
+            <option value="auto">آنلاین (خودکار)</option>
+            <option value="offline">آفلاین</option>
+          </select>
+        </div>
+      </header>
+
+      <section class="chat-area" id="chatArea">
+        <div class="welcome" id="welcome">
+          <div class="aura-orb">✦</div>
+          <p class="eyebrow">دستیار هوشمند تو</p>
+          <h1>سلام، من <span>AURA</span> هستم.</h1>
+          <p class="welcome-sub">چه کاری می‌تونم برات انجام بدم؟</p>
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="یک برنامه مطالعه ساده برای من پیشنهاد بده.">📚 برنامه‌ریزی مطالعه</button>
+            <button class="suggestion" data-prompt="این متن را به انگلیسی ترجمه کن:">🌍 ترجمه متن</button>
+            <button class="suggestion" data-prompt="یک ایده خلاقانه برای پروژه برنامه‌نویسی پیشنهاد بده.">💡 ایده‌پردازی</button>
+            <button class="suggestion" data-prompt="مفهوم هوش مصنوعی را ساده توضیح بده.">🧠 یادگیری</button>
+          </div>
+        </div>
+        <div class="messages" id="messages" aria-live="polite"></div>
+      </section>
+
+      <footer class="composer-wrap">
+        <div class="offline-note" id="offlineNote" hidden>حالت آفلاین: فقط چت فعال است و برای پاسخ‌گویی باید مدل روی این دستگاه بارگیری شود.</div>
+        <form class="composer" id="chatForm">
+          <textarea id="promptInput" rows="1" maxlength="6000" placeholder="پیامت رو برای AURA بنویس..." aria-label="متن پیام"></textarea>
+          <button class="send-btn" id="sendBtn" type="submit" aria-label="ارسال پیام">↑</button>
+        </form>
+        <div class="composer-hint">AURA ممکن است اشتباه کند؛ اطلاعات مهم را بررسی کن.</div>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="./config.js"></script>
+  <script src="./app.js" type="module"></script>
+</body>
+</html>
