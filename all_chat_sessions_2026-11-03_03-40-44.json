@@ -1,0 +1,133 @@
+[
+  {
+    "id": "DBQOzv0Q4XsxbbRm",
+    "title": "سلام",
+    "date": "2026-11-03T00:08:02.604Z",
+    "messages": [
+      {
+        "id": "tksE10360XCW9nOr",
+        "author": "h3o3lc5xj",
+        "text": "",
+        "type": "assistant_turn",
+        "metadata": {
+          "contextId": "22683",
+          "conversationId": "g1i4nd4u6",
+          "multimodal": false,
+          "steps": [
+            {
+              "partial": false
+            }
+          ],
+          "timings": {
+            "prompt_n": 1,
+            "prompt_ms": 0,
+            "prompt_per_token_ms": 0,
+            "prompt_per_second": 0,
+            "predicted_n": 0,
+            "predicted_ms": 0,
+            "predicted_per_token_ms": 0,
+            "predicted_per_second": 0,
+            "cache_n": 9,
+            "time_to_first_token_ms": null
+          },
+          "copyable": true,
+          "completionResult": {
+            "used": 119,
+            "contextFull": false,
+            "tokensPredicted": 0,
+            "isRemote": false
+          }
+        },
+        "createdAt": 1793664532628
+      },
+      {
+        "id": "FinfoCFQSEAEXMpV",
+        "author": "y9d7f8pgn",
+        "text": "ممنونم چند سالته",
+        "type": "text",
+        "metadata": {
+          "contextId": "22683",
+          "conversationId": "g1i4nd4u6",
+          "copyable": true,
+          "multimodal": false
+        },
+        "createdAt": 1793664532465
+      },
+      {
+        "id": "bRuFVsXFBV4oOEbT",
+        "author": "h3o3lc5xj",
+        "text": "سلام! من Bonsai هستم، یک دستیار هوش مصنوعی که توسط PrismML توسعه یافته است. خوشحالم که با شما هستم. من یک مدل 1-bit هستم که برای تأخیر کم و مصرف حافظه کم بهینه شده است.",
+        "type": "assistant_turn",
+        "metadata": {
+          "contextId": "22683",
+          "conversationId": "g1i4nd4u6",
+          "multimodal": false,
+          "steps": [
+            {
+              "partial": false,
+              "content": "سلام! من Bonsai هستم، یک دستیار هوش مصنوعی که توسط PrismML توسعه یافته است. خوشحالم که با شما هستم. من یک مدل 1-bit هستم که برای تأخیر کم و مصرف حافظه کم بهینه شده است."
+            }
+          ],
+          "timings": {
+            "prompt_n": 13,
+            "prompt_ms": 4646.984,
+            "prompt_per_token_ms": 357.4603076923077,
+            "prompt_per_second": 2.7975133979372426,
+            "predicted_n": 86,
+            "predicted_ms": 41208.669,
+            "predicted_per_token_ms": 479.17056976744186,
+            "predicted_per_second": 2.0869395223611806,
+            "cache_n": 100,
+            "time_to_first_token_ms": 4777
+          },
+          "copyable": true,
+          "completionResult": {
+            "content": "سلام! من Bonsai هستم، یک دستیار هوش مصنوعی که توسط PrismML توسعه یافته است. خوشحالم که با شما هستم. من یک مدل 1-bit هستم که برای تأخیر کم و مصرف حافظه کم بهینه شده است.",
+            "used": 99,
+            "contextFull": false,
+            "tokensPredicted": 86,
+            "isRemote": false
+          }
+        },
+        "createdAt": 1793664482861
+      },
+      {
+        "id": "N2lgcPDsFSil95Th",
+        "author": "y9d7f8pgn",
+        "text": "سلام",
+        "type": "text",
+        "metadata": {
+          "contextId": "22683",
+          "conversationId": "g1i4nd4u6",
+          "copyable": true,
+          "multimodal": false
+        },
+        "createdAt": 1793664482584
+      }
+    ],
+    "completionSettings": {
+      "version": 4,
+      "include_thinking_in_context": true,
+      "n_predict": -1,
+      "temperature": 0.7,
+      "top_k": 40,
+      "top_p": 0.95,
+      "min_p": 0.05,
+      "xtc_threshold": 0.1,
+      "xtc_probability": 0,
+      "typical_p": 1,
+      "penalty_last_n": 64,
+      "penalty_repeat": 1,
+      "penalty_freq": 0,
+      "penalty_present": 0,
+      "mirostat": 0,
+      "mirostat_tau": 5,
+      "mirostat_eta": 0.1,
+      "seed": -1,
+      "n_probs": 0,
+      "jinja": true,
+      "enable_thinking": true
+    },
+    "activePalId": null
+  }
+]
