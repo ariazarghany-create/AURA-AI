@@ -175,7 +175,7 @@ function updateStatus() {
   }
 }
 
-async function askOnline(messages) {
+async function askOnline(messages, webSearch = false) {
   const base = (
     window.AURA_CONFIG?.API_BASE || ""
   ).replace(/\/$/, "");
@@ -193,7 +193,9 @@ async function askOnline(messages) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ messages })
+      body: JSON.stringify({
+  messages,
+  web_search: webSearch
     }
   );
 
@@ -228,8 +230,9 @@ async function submit(text) {
     }
 
     const reply = await askOnline(
-      current().messages
-    );
+  current().messages,
+  text.trim().startsWith("جستجو:")
+);
 
     addMessage("assistant", reply);
 
