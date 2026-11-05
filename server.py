@@ -221,4 +221,4 @@ async def chat(payload: ChatRequest):
         raise HTTPException(
             status_code=502,
             detail="ارتباط با سرویس هوش مصنوعی برقرار نشد."
-        )
+)
