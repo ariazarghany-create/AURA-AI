@@ -1,4 +1,5 @@
 import os
+import logging
 from typing import List, Literal
 
 import httpx
@@ -6,7 +7,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-app = FastAPI(title="AURA AI API", version="0.2.0")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("aura")
+
+app = FastAPI(title="AURA AI API", version="0.3.0")
 
 allowed = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
@@ -38,10 +42,13 @@ async def search_web(query: str):
     api_key = os.getenv("TAVILY_API_KEY")
 
     if not api_key:
+        logger.error("TAVILY: API key is missing")
         raise HTTPException(
             status_code=503,
             detail="کلید جست‌وجوی Tavily تنظیم نشده است."
         )
+
+    logger.info("TAVILY: Search request started")
 
     try:
         async with httpx.AsyncClient(timeout=30) as client:
@@ -56,20 +63,47 @@ async def search_web(query: str):
                 }
             )
 
+        logger.info(
+            "TAVILY: HTTP status %s",
+            response.status_code
+        )
+
         response.raise_for_status()
         data = response.json()
+        results = data.get("results", [])
 
-        return data.get("results", [])
+        logger.info(
+            "TAVILY: Results received: %s",
+            len(results)
+        )
 
-    except httpx.HTTPError:
+        return results
+
+    except httpx.HTTPStatusError as exc:
+        logger.error(
+            "TAVILY: HTTP error %s",
+            exc.response.status_code
+        )
         raise HTTPException(
             status_code=502,
-            detail="جست‌وجوی اینترنتی ناموفق بود."
+            detail="سرویس جست‌وجوی اینترنتی خطا داد."
+        )
+
+    except (httpx.HTTPError, ValueError):
+        logger.exception("TAVILY: Connection or response error")
+        raise HTTPException(
+            status_code=502,
+            detail="ارتباط با سرویس جست‌وجوی اینترنتی برقرار نشد."
         )
 
 
 @app.post("/api/chat")
 async def chat(payload: ChatRequest):
+    logger.info(
+        "CHAT: Request received. web_search=%s",
+        payload.web_search
+    )
+
     api_key = os.getenv("AI_API_KEY")
 
     api_url = os.getenv(
@@ -102,40 +136,59 @@ async def chat(payload: ChatRequest):
             ""
         )
 
-        results = await search_web(last_user_message)
+        query = last_user_message.strip()
 
-        if results:
-            context = "\n\n".join(
-                [
-                    f"عنوان: {item.get('title', '')}\n"
-                    f"لینک: {item.get('url', '')}\n"
-                    f"محتوا: {item.get('content', '')}"
-                    for item in results
-                ]
+        if query.startswith("جستجو:"):
+            query = query[len("جستجو:"):].strip()
+
+        if not query:
+            raise HTTPException(
+                status_code=400,
+                detail="عبارت جست‌وجو خالی است."
             )
 
-            sources = [
-                {
-                    "title": item.get("title", ""),
-                    "url": item.get("url", "")
-                }
+        results = await search_web(query)
+
+        if not results:
+            logger.warning("TAVILY: No search results found")
+            raise HTTPException(
+                status_code=502,
+                detail="جست‌وجو انجام شد، اما نتیجه‌ای پیدا نشد."
+            )
+
+        context = "\n\n".join(
+            [
+                f"عنوان: {item.get('title', '')}\n"
+                f"لینک: {item.get('url', '')}\n"
+                f"محتوا: {item.get('content', '')}"
                 for item in results
-                if item.get("url")
             ]
+        )
 
-            messages.insert(
-                0,
-                {
-                    "role": "system",
-                    "content": (
-                        "تو دستیار AURA هستی. "
-                        "با استفاده از منابع زیر پاسخ دقیق بده. "
-                        "اگر اطلاعات کافی نیست، صادقانه بگو. "
-                        "منابع را جعل نکن.\n\n"
-                        + context
-                    )
-                }
-            )
+        sources = [
+            {
+                "title": item.get("title", ""),
+                "url": item.get("url", "")
+            }
+            for item in results
+            if item.get("url")
+        ]
+
+        messages.insert(
+            0,
+            {
+                "role": "system",
+                "content": (
+                    "تو دستیار AURA هستی. "
+                    "کاربر درخواست جست‌وجوی اینترنتی داده است. "
+                    "از اطلاعات و منابع زیر برای پاسخ استفاده کن. "
+                    "اطلاعات قدیمی را به‌عنوان خبر جدید معرفی نکن. "
+                    "اگر منابع کافی نیستند، صادقانه بگو. "
+                    "منابع را جعل نکن.\n\n"
+                    + context
+                )
+            }
+        )
 
     body = {
         "model": model,
@@ -154,7 +207,6 @@ async def chat(payload: ChatRequest):
             )
 
         response.raise_for_status()
-
         data = response.json()
 
         reply = data["choices"][0]["message"]["content"]
@@ -168,9 +220,14 @@ async def chat(payload: ChatRequest):
                     f"({source['url']})\n"
                 )
 
+        logger.info("CHAT: Response generated successfully")
         return {"reply": reply}
 
     except httpx.HTTPStatusError as exc:
+        logger.error(
+            "AI: HTTP error %s",
+            exc.response.status_code
+        )
         raise HTTPException(
             status_code=502,
             detail=(
@@ -180,7 +237,8 @@ async def chat(payload: ChatRequest):
         )
 
     except (httpx.HTTPError, KeyError, IndexError, ValueError):
+        logger.exception("AI: Request or response error")
         raise HTTPException(
             status_code=502,
             detail="ارتباط با سرویس هوش مصنوعی برقرار نشد."
-  )
+    )
