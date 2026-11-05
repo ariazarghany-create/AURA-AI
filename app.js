@@ -194,8 +194,9 @@ async function askOnline(messages, webSearch = false) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-  messages,
-  web_search: webSearch
+        messages,
+        web_search: webSearch
+      })
     }
   );
 
@@ -229,10 +230,13 @@ async function submit(text) {
       );
     }
 
+    const webSearch =
+      text.trim().startsWith("جستجو:");
+
     const reply = await askOnline(
-  current().messages,
-  text.trim().startsWith("جستجو:")
-);
+      current().messages,
+      webSearch
+    );
 
     addMessage("assistant", reply);
 
