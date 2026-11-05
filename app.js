@@ -69,13 +69,40 @@ if (!isOnline) {
     "اتصال اینترنت برقرار نیست. برای استفاده از AURA اینترنت لازم است.";
 }
 } }
-async function askOnline(messages, webSearch = false) { const base = ( window.AURA_CONFIG?.API_BASE || "" ).replace(//$/, "");
-if (!base) { throw new Error( "نشانی سرور آنلاین تنظیم نشده است." ); }
-const response = await fetch( ${base}/api/chat, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages, web_search: webSearch }) } );
-const data = await response.json().catch(() => ({}));
-if (!response.ok) { throw new Error( data.detail || "ارتباط با سرور ناموفق بود." ); }
-if (!data.reply) { throw new Error("پاسخ سرور معتبر نیست."); }
-return data.reply; }
+async function askOnline(messages, webSearch = false) {
+  const base = (
+    window.AURA_CONFIG?.API_BASE || ""
+  ).replace(/\/$/, "");
+
+  if (!base) {
+    throw new Error("نشانی سرور آنلاین تنظیم نشده است.");
+  }
+
+  const response = await fetch(`${base}/api/chat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages,
+      web_search: webSearch
+    })
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      data.detail || "ارتباط با سرور ناموفق بود."
+    );
+  }
+
+  if (!data.reply) {
+    throw new Error("پاسخ سرور معتبر نیست.");
+  }
+
+  return data.reply;
+}
 async function submit(text) { if (state.busy || !text.trim()) return;
 state.busy = true;
 const sendBtn = $("sendBtn"); if (sendBtn) sendBtn.disabled = true;
