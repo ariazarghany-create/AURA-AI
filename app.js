@@ -44,7 +44,8 @@ box.replaceChildren();
 const welcome = $("welcome");
 if (welcome) { welcome.hidden = !!(c && c.messages.length); }
 if (!c) return;
-c.messages.forEach(m => { const row = document.createElement("div"); row.className = message ${m.role};
+const row = document.createElement("div");
+row.className = `message ${m.role}`;
 const av = document.createElement("div");
 av.className = "avatar";
 av.textContent =
