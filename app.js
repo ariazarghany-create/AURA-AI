@@ -110,8 +110,7 @@ const sendBtn = $("sendBtn"); if (sendBtn) sendBtn.disabled = true;
 addMessage("user", text.trim());
 try { if (!navigator.onLine) { throw new Error( "اینترنت قطع است. لطفاً اتصال اینترنت را بررسی کن." ); }
 const webSearch =
-  text.trim().startsWith("جستجو:");
-
+  text.trim().startsWith("جستجو:")
 const reply = await askOnline(
   current().messages,
   webSearch
